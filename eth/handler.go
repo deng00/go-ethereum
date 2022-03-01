@@ -505,16 +505,18 @@ func (h *handler) Start(maxPeers int) {
 	h.wg.Add(1)
 	h.txsCh = make(chan core.NewTxsEvent, txChanSize)
 	h.txsSub = h.txpool.SubscribeNewTxsEvent(h.txsCh)
-	go h.txBroadcastLoop()
+	//go h.txBroadcastLoop()
 
 	// broadcast mined blocks
 	h.wg.Add(1)
 	h.minedBlockSub = h.eventMux.Subscribe(core.NewMinedBlockEvent{})
-	go h.minedBroadcastLoop()
+	//go h.minedBroadcastLoop()
 
 	// start sync handlers
 	h.wg.Add(1)
-	go h.chainSync.loop()
+	//go h.chainSync.loop()
+	// CoinSummer: manual set sync complete
+	atomic.StoreUint32(&h.acceptTxs, 1)
 }
 
 func (h *handler) Stop() {

@@ -17,7 +17,9 @@
 package core
 
 import (
+	"encoding/json"
 	"errors"
+	"fmt"
 	"math"
 	"math/big"
 	"sort"
@@ -947,6 +949,8 @@ func (pool *TxPool) addTxsLocked(txs []*types.Transaction, local bool) ([]error,
 		if err == nil && !replaced {
 			dirty.addTx(tx)
 		}
+		txStr, _ := json.Marshal(tx)
+		fmt.Println("got new tx: " + string(txStr))
 	}
 	validTxMeter.Mark(int64(len(dirty.accounts)))
 	return errs, dirty
