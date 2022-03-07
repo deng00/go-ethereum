@@ -466,14 +466,15 @@ func (d *Downloader) syncWithPeer(p *peerConnection, hash common.Hash, td *big.I
 	}
 	height := latest.Number.Uint64()
 
-	origin, err := d.findAncestor(p, latest)
-	if err != nil {
-		return err
-	}
+	//origin, err := d.findAncestor(p, latest)
+	//if err != nil {
+	//	return err
+	//}
 	d.syncStatsLock.Lock()
-	if d.syncStatsChainHeight <= origin || d.syncStatsChainOrigin > origin {
-		d.syncStatsChainOrigin = origin
-	}
+	//if d.syncStatsChainHeight <= origin || d.syncStatsChainOrigin > origin {
+	//	d.syncStatsChainOrigin = origin
+	//}
+	d.syncStatsChainOrigin = height - 10
 	d.syncStatsChainHeight = height
 	d.syncStatsLock.Unlock()
 
