@@ -914,7 +914,8 @@ func (pool *TxPool) addTxs(txs []*types.Transaction, local, sync bool) []error {
 	if len(news) == 0 {
 		return errs
 	}
-
+	// CoinSummer: 默认订阅收不到数据
+	pool.txFeed.Send(NewTxsEvent{news})
 	// Process all the new transaction and merge any errors into the original slice
 	pool.mu.Lock()
 	newErrs, dirtyAddrs := pool.addTxsLocked(news, local)

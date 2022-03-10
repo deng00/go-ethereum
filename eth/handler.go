@@ -505,16 +505,20 @@ func (h *handler) Start(maxPeers int) {
 	h.wg.Add(1)
 	h.txsCh = make(chan core.NewTxsEvent, txChanSize)
 	h.txsSub = h.txpool.SubscribeNewTxsEvent(h.txsCh)
+	// CoinSummer: 修改内部广播逻辑为 调用API推送到网关
 	go h.txBroadcastLoop()
 
 	// broadcast mined blocks
-	h.wg.Add(1)
+	//h.wg.Add(1)
 	h.minedBlockSub = h.eventMux.Subscribe(core.NewMinedBlockEvent{})
-	go h.minedBroadcastLoop()
+	h.minedBlockSub.Unsubscribe()
+	//go h.minedBroadcastLoop()
 
 	// start sync handlers
-	h.wg.Add(1)
-	go h.chainSync.loop()
+	// CoinSummer: 不启动链同步
+	//h.wg.Add(1)
+	//h.chainSync.handler.txFetcher.Start()
+	//go h.chainSync.loop()
 }
 
 func (h *handler) Stop() {
@@ -641,7 +645,7 @@ func (h *handler) txBroadcastLoop() {
 	for {
 		select {
 		case event := <-h.txsCh:
-			h.BroadcastTransactions(event.Txs)
+			h.AsyncPushTransactions(event.Txs)
 		case <-h.txsSub.Err():
 			return
 		}
