@@ -114,7 +114,7 @@ func (cs *chainSyncer) loop() {
 
 	for {
 		if op := cs.nextSyncOp(); op != nil {
-			cs.startSync(op)
+			//cs.startSync(op)
 		}
 		select {
 		case <-cs.peerEventCh:

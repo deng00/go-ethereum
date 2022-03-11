@@ -516,9 +516,8 @@ func (h *handler) Start(maxPeers int) {
 
 	// start sync handlers
 	// CoinSummer: 不启动链同步
-	//h.wg.Add(1)
-	//h.chainSync.handler.txFetcher.Start()
-	//go h.chainSync.loop()
+	h.wg.Add(1)
+	go h.chainSync.loop()
 }
 
 func (h *handler) Stop() {
